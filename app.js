@@ -8,6 +8,7 @@ const cors = require('cors')
 const indexRouter = require('./routes')
 const { errorParser } = require('./middlewares/error-parser')
 const config = require('./bin/config')
+const db = require('./models')
 
 const app = express()
 app.use(cors({
@@ -41,6 +42,10 @@ app.use(function (err, req, res, next) {
 
 app.listen(config.SERVER_PORT, () => {
   console.log('Express server listening on port ' + config.SERVER_PORT)
+})
+
+db.sq.sync({alter: true}).then(() => {
+  console.log('sq done')
 })
 
 module.exports = app

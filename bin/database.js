@@ -11,18 +11,4 @@ const pool = mysql.createPool({
     queueLimit: 0
 })
 
-const connection = {
-    HOST: process.env.DB_WRITE_HOST,
-    USER: process.env.DB_USERNAME,
-    PASSWORD: process.env.DB_PASSWORD,
-    DB: process.env.DB_DATABASE,
-    dialect: process.env.DATABASE_TYPE,
-    pool: {
-        max: 5,
-        min: 0,
-        acquire: 30000,
-        idle: 10000,
-    }
-}
-
-module.exports = { pool, connection }
+module.exports = { pool }

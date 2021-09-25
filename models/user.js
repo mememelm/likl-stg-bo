@@ -6,7 +6,7 @@ const user = (sq, type) => {
         password: type.STRING,
         lastname: type.STRING,
         firstname: type.STRING,
-        identity_card: type.STRING,
+        identity_card: type.INTEGER,
         phone: type.STRING,
         gender: type.STRING
     }, { freezeTableName: true })

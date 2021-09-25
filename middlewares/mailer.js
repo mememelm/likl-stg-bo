@@ -1,7 +1,5 @@
-'use-strict'
 require('dotenv').config()
 const nodemailer = require('nodemailer')
-const config = require('../bin/config')
 
 const sendMail = async (to, subject, html) => {
     let transporter = nodemailer.createTransport({

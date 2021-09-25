@@ -1,4 +1,4 @@
-const { sendMail } = require("../helpers/mailer")
+const { sendMail } = require("../middlewares/mailer")
 
 const send = async (req, res) => {
     sendMail(req.body.to, req.body.subject, req.body.html)

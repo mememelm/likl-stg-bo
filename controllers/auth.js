@@ -1,40 +1,70 @@
 const jwt = require('jsonwebtoken')
+const config = require('../bin/config')
 const Hash = require('crypto-js/pbkdf2')
 const { pool } = require('../bin/database')
+const { sendMail } = require('../middlewares/mailer')
+const text = require('../helpers/text')
 
 const signing = (req, res) => {
-    pool.getConnection((err, connection) => {
-        if (err) throw err
+    pool.getConnection((error, connection) => {
+        if (error) throw error
         const body = req.body
         let insert = {
-            login: body.login,
+            username: body.username,
+            email: body.email,
             password: Hash(body.password, process.env.APP_SECRET).toString(),
             lastname: body.lastname,
             firstname: body.firstname,
             identity_card: body.identity_card,
             phone: body.phone,
             gender: body.gender,
+            role: body.role,
             createdAt: new Date(),
             updatedAt: new Date()
         }
-        let mailQuery = 'SELECT id, login FROM users WHERE login = ?'
-        connection.query(mailQuery, [body.email], (err, resEmail) => {
+        let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.username] + "' OR email = '" + [body.email] + "'"
+        connection.query(queryIfUserExist, [body.username, body.email], (err, resFind) => {
             // @ts-ignore
-            if (!err && resEmail.length >= 1) {
-                res.status(200).json({ message: 'login_already_used' })
+            if (!err && resFind.length >= 1) {
+                res.status(200).json({ message: 'username_already_used' })
             } else {
                 let insertQuery = 'INSERT INTO user SET ?'
-                connection.query(insertQuery, insert, (error, response) => {
+                connection.query(insertQuery, insert, async (error, response) => {
                     if (error) throw error
-
+                    let subject = 'Inscription E-Voyage'
+                    let html = text.signing(body)
+                    await sendMail(body.email, subject, html)
+                    res.status(200).json({ user: response, message: 'user_add' })
                 })
             }
         })
     })
 }
 
-const logger = () => {
-
+const logger = (req, res) => {
+    pool.getConnection((error, connection) => {
+        if (error) throw error
+        const body = req.body
+        let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.username] + "' OR email = '" + [body.email] + "'"
+        connection.query(queryIfUserExist, [body.username, body.email], (err, response) => {
+            // @ts-ignore
+            if (!err && response.length === 1) {
+                const user = response[0]
+                const sign = { exp: Math.floor(Date.now() / 1000) + config.jwtExpire, sub: user.id }
+                const passwordInput = Hash(req.body.password, config.appSecret).toString()
+                if (user.password !== passwordInput) {
+                    res.status(403).json({ message: "password_not_same" })
+                } else {
+                    res.status(200).json({ message: "success", token: jwt.sign(sign, process.env.JWT_SECRET) })
+                }
+                // @ts-ignore
+            } else if (!err && response.length === 0) {
+                res.status(403).json({ message: "user_not_in_db" })
+            } else {
+                res.status(401).send({ error: "Unauthorized", message: "Authentication failed" })
+            }
+        })
+    })
 }
 
 module.exports = {

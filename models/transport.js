@@ -4,7 +4,7 @@ const transport = (sq, type) => {
     return sq.define('transport', {
         description: type.STRING,
         departure_date: type.DATE,
-        time: { type: type.ENUM, values: ['m', 's'] }
+        time: { type: type.ENUM, values: ['M', 'S'] }
     }, { freezeTableName: true })
 }
 

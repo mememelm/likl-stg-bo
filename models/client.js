@@ -5,7 +5,7 @@ const client = (sq, type) => {
         firstname: type.STRING,
         lastname: type.STRING,
         checked: type.BOOLEAN,
-        type_identify: { type: type.ENUM, values: ['pp', 'ic', 'others'] }
+        type_identify: { type: type.ENUM, values: ['PP', 'CIN', 'OTHER'] }
     }, { freezeTableName: true })
 }
 

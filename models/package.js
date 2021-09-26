@@ -14,7 +14,7 @@ const package = (sq, type) => {
         sender_lastname: type.STRING,
         receiver_firstname: type.STRING,
         receiver_lastname: type.STRING,
-        receiver_identifying: type.STRING
+        receiver_identify: type.STRING
     }, { freezeTableName: true })
 }
 

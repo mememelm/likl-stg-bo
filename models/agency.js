@@ -11,7 +11,7 @@ const agencyHasManyCompanies = (agency, company) => {
     agency.hasMany(company, { onDelete: 'cascade' })
 }
 
-module.exports = { 
-    agency, 
-    agencyHasManyCompanies 
+module.exports = {
+    agency,
+    agencyHasManyCompanies
 }

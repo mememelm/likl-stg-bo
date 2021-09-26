@@ -25,6 +25,10 @@ db.luggage = require('./luggage').luggage(sequelize, SQ)
 db.category = require('./category').category(sequelize, SQ)
 db.package = require('./package').package(sequelize, SQ)
 
+const { userBelongsToAgency, userBelongsToCompany } = require('./user')
+userBelongsToAgency(db.user, db.agency)
+userBelongsToCompany(db.user, db.company)
+
 const { agencyHasManyCompanies } = require('./agency')
 agencyHasManyCompanies(db.agency, db.company)
 

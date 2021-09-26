@@ -23,6 +23,7 @@ db.client = require('./client').client(sequelize, SQ)
 db.transport = require('./transport').transport(sequelize, SQ)
 db.luggage = require('./luggage').luggage(sequelize, SQ)
 db.category = require('./category').category(sequelize, SQ)
+db.package = require('./package').package(sequelize, SQ)
 
 const { agencyHasManyCompanies } = require('./agency')
 agencyHasManyCompanies(db.agency, db.company)
@@ -48,5 +49,9 @@ luggageBelongsToTransport(db.luggage, db.transport)
 const { transportBelongsToVehicle, transportHasManyClients } = require('./transport')
 transportBelongsToVehicle(db.transport, db.vehicle)
 transportHasManyClients(db.transport, db.client)
+
+const { packageBelongsToTransport, packageBelongsToCompany } = require('./package')
+packageBelongsToTransport(db.package, db.transport)
+packageBelongsToCompany(db.package, db.company)
 
 module.exports = db

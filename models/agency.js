@@ -7,8 +7,11 @@ const agency = (sq, type) => {
     }, { freezeTableName: true })
 }
 
-const agencyHasManyCompany = (agency, company) => {
+const agencyHasManyCompanies = (agency, company) => {
     agency.hasMany(company, { onDelete: 'cascade' })
 }
 
-module.exports = { agency, agencyHasManyCompany }
+module.exports = { 
+    agency, 
+    agencyHasManyCompanies 
+}

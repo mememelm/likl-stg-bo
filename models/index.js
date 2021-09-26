@@ -14,8 +14,39 @@ db.sq = sequelize
 db.user = require('./user').user(sequelize, SQ)
 db.agency = require('./agency').agency(sequelize, SQ)
 db.company = require('./company').company(sequelize, SQ)
+db.vehicle = require('./vehicle').vehicle(sequelize, SQ)
+db.itinerary = require('./itinerary').itinerary(sequelize, SQ)
+db.pricing = require('./pricing').pricing(sequelize, SQ)
+db.place = require('./place').place(sequelize, SQ)
+db.booking = require('./booking').booking(sequelize, SQ)
+db.client = require('./client').client(sequelize, SQ)
+db.transport = require('./transport').transport(sequelize, SQ)
+db.luggage = require('./luggage').luggage(sequelize, SQ)
+db.category = require('./category').category(sequelize, SQ)
 
-const { agencyHasManyCompany } = require('./agency')
-agencyHasManyCompany(db.agency, db.company)
+const { agencyHasManyCompanies } = require('./agency')
+agencyHasManyCompanies(db.agency, db.company)
+
+const { companyHasManyPricing, companyHasManyItinerary } = require('./company')
+companyHasManyPricing(db.company, db.pricing)
+companyHasManyItinerary(db.company, db.itinerary)
+
+const { vehicleBelongsToCompany, vehicleHasManyPlaces } = require('./vehicle')
+vehicleBelongsToCompany(db.vehicle, db.company)
+vehicleHasManyPlaces(db.vehicle, db.place)
+
+const { bookingBelongsToClient } = require('./booking')
+bookingBelongsToClient(db.booking, db.client)
+
+const { itineraryHasManyBookings } = require('./itinerary')
+itineraryHasManyBookings(db.itinerary, db.booking)
+
+const { luggageBelongsToClient, luggageBelongsToTransport } = require('./luggage')
+luggageBelongsToClient(db.luggage, db.client)
+luggageBelongsToTransport(db.luggage, db.transport)
+
+const { transportBelongsToVehicle, transportHasManyClients } = require('./transport')
+transportBelongsToVehicle(db.transport, db.vehicle)
+transportHasManyClients(db.transport, db.client)
 
 module.exports = db

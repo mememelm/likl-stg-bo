@@ -9,4 +9,16 @@ const company = (sq, type) => {
     })
 }
 
-module.exports = { company }
+const companyHasManyPricing = (company, pricing) => {
+    company.hasMany(pricing, { onDelete: 'cascade' })
+}
+
+const companyHasManyItinerary = (company, itinerary) => {
+    company.hasMany(itinerary, { onDelete: 'cascade' })
+}
+
+module.exports = {
+    company,
+    companyHasManyPricing,
+    companyHasManyItinerary
+}

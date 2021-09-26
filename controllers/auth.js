@@ -50,12 +50,20 @@ const logger = (req, res) => {
             // @ts-ignore
             if (!err && response.length === 1) {
                 const user = response[0]
+                const userObject = {
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    username: user.username,
+                    email: user.email,
+                    role: user.role
+                }
                 const sign = { exp: Math.floor(Date.now() / 1000) + config.JWT_EXPIRE, sub: user.id }
                 const passwordInput = Hash(body.password, process.env.APP_SECRET).toString()
                 if (user.password !== passwordInput) {
-                    res.status(403).json({ message: "password_not_same" })
+
+                    res.status(403).json({ message: "password_error", user: userObject })
                 } else {
-                    res.status(200).json({ message: "success", token: jwt.sign(sign, config.JWT_SECRET) })
+                    res.status(200).json({ message: "success", user: userObject, token: jwt.sign(sign, config.JWT_SECRET) })
                 }
                 // @ts-ignore
             } else if (!err && response.length === 0) {

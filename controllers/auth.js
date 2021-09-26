@@ -60,7 +60,6 @@ const logger = (req, res) => {
                 const sign = { exp: Math.floor(Date.now() / 1000) + config.JWT_EXPIRE, sub: user.id }
                 const passwordInput = Hash(body.password, process.env.APP_SECRET).toString()
                 if (user.password !== passwordInput) {
-
                     res.status(403).json({ message: "password_error", user: userObject })
                 } else {
                     res.status(200).json({ message: "success", user: userObject, token: jwt.sign(sign, config.JWT_SECRET) })

@@ -12,5 +12,10 @@ db.type = SQ
 db.sq = sequelize
 
 db.user = require('./user').user(sequelize, SQ)
+db.agency = require('./agency').agency(sequelize, SQ)
+db.company = require('./company').company(sequelize, SQ)
+
+const { agencyHasManyCompany } = require('./agency')
+agencyHasManyCompany(db.agency, db.company)
 
 module.exports = db

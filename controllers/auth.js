@@ -4,6 +4,7 @@ const { pool } = require('../bin/database')
 const { sendMail } = require('../middlewares/mailer')
 const text = require('../helpers/text')
 const config = require('../bin/config')
+const db = require('../models')
 
 const signing = (req, res) => {
     pool.getConnection((error, connection) => {
@@ -20,7 +21,9 @@ const signing = (req, res) => {
             gender: body.gender,
             role: body.role,
             createdAt: new Date(),
-            updatedAt: new Date()
+            updatedAt: new Date(),
+            agencyId: body.agencyId,
+            companyId: body.companyId
         }
         let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.username] + "' OR email = '" + [body.email] + "'"
         connection.query(queryIfUserExist, (err, resFind) => {
@@ -46,7 +49,7 @@ const logger = (req, res) => {
         if (error) throw error
         const body = req.body
         let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.login] + "' OR email = '" + [body.login] + "'"
-        connection.query(queryIfUserExist, (err, response) => {
+        connection.query(queryIfUserExist, async (err, response) => {
             // @ts-ignore
             if (!err && response.length === 1) {
                 const user = response[0]
@@ -55,20 +58,35 @@ const logger = (req, res) => {
                     lastname: user.lastname,
                     username: user.username,
                     email: user.email,
-                    role: user.role
+                    role: user.role,
+                    agencyId: user.agencyId,
+                    companyId: user.companyId
                 }
                 const sign = { exp: Math.floor(Date.now() / 1000) + config.JWT_EXPIRE, sub: user.id }
                 const passwordInput = Hash(body.password, process.env.APP_SECRET).toString()
+                const agency = await db.agency.findByPk(user.agencyId)
+                const company = await db.company.findByPk(user.companyId)
                 if (user.password !== passwordInput) {
-                    res.status(403).json({ message: "password_error", user: userObject })
+                    res.status(403).json({
+                        message: "password_error",
+                        user: userObject,
+                        agency: agency,
+                        company: company
+                    })
                 } else {
-                    res.status(200).json({ message: "success", user: userObject, token: jwt.sign(sign, config.JWT_SECRET) })
+                    return res.status(200).json({
+                        message: "success",
+                        user: userObject,
+                        token: jwt.sign(sign, config.JWT_SECRET),
+                        agency: agency,
+                        company: company
+                    })
                 }
                 // @ts-ignore
             } else if (!err && response.length === 0) {
-                res.status(403).json({ message: "user_not_in_db" })
+                return res.status(403).json({ message: "user_not_in_db" })
             } else {
-                res.status(401).send({ error: "Unauthorized", message: "Authentication failed" })
+                return res.status(401).send({ message: "unauthorized" })
             }
         })
     })

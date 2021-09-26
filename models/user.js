@@ -10,7 +10,7 @@ const user = (sq, type) => {
         firstname: type.STRING,
         identity_card: type.STRING,
         phone: type.STRING,
-        gender: { type: type.ENUM, values: ['M', 'F'] }
+        gender: { type: type.ENUM, values: ['M', 'F', 'O'] }
     }, { freezeTableName: true })
 }
 

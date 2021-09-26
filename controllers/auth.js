@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
-const config = require('../bin/config')
 const Hash = require('crypto-js/pbkdf2')
 const { pool } = require('../bin/database')
 const { sendMail } = require('../middlewares/mailer')
 const text = require('../helpers/text')
+const config = require('../bin/config')
 
 const signing = (req, res) => {
     pool.getConnection((error, connection) => {
@@ -23,7 +23,7 @@ const signing = (req, res) => {
             updatedAt: new Date()
         }
         let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.username] + "' OR email = '" + [body.email] + "'"
-        connection.query(queryIfUserExist, [body.username, body.email], (err, resFind) => {
+        connection.query(queryIfUserExist, (err, resFind) => {
             // @ts-ignore
             if (!err && resFind.length >= 1) {
                 res.status(200).json({ message: 'username_already_used' })
@@ -45,17 +45,17 @@ const logger = (req, res) => {
     pool.getConnection((error, connection) => {
         if (error) throw error
         const body = req.body
-        let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.username] + "' OR email = '" + [body.email] + "'"
-        connection.query(queryIfUserExist, [body.username, body.email], (err, response) => {
+        let queryIfUserExist = "SELECT * FROM user WHERE username = '" + [body.login] + "' OR email = '" + [body.login] + "'"
+        connection.query(queryIfUserExist, (err, response) => {
             // @ts-ignore
             if (!err && response.length === 1) {
                 const user = response[0]
-                const sign = { exp: Math.floor(Date.now() / 1000) + config.jwtExpire, sub: user.id }
-                const passwordInput = Hash(req.body.password, config.appSecret).toString()
+                const sign = { exp: Math.floor(Date.now() / 1000) + config.JWT_EXPIRE, sub: user.id }
+                const passwordInput = Hash(body.password, process.env.APP_SECRET).toString()
                 if (user.password !== passwordInput) {
                     res.status(403).json({ message: "password_not_same" })
                 } else {
-                    res.status(200).json({ message: "success", token: jwt.sign(sign, process.env.JWT_SECRET) })
+                    res.status(200).json({ message: "success", token: jwt.sign(sign, config.JWT_SECRET) })
                 }
                 // @ts-ignore
             } else if (!err && response.length === 0) {

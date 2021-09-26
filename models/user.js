@@ -8,10 +8,9 @@ const user = (sq, type) => {
         role: { type: type.ENUM, values: ['ADMIN', 'SUPER_USER', 'USER'] },
         lastname: type.STRING,
         firstname: type.STRING,
-        identity_card: type.INTEGER,
+        identity_card: type.STRING,
         phone: type.STRING,
-        gender:  { type: type.ENUM, values: ['M', 'F'] },
-        enabled: type.BOOLEAN
+        gender: { type: type.ENUM, values: ['M', 'F'] }
     }, { freezeTableName: true })
 }
 

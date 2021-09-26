@@ -67,7 +67,7 @@ const logger = (req, res) => {
                 const agency = await db.agency.findByPk(user.agencyId)
                 const company = await db.company.findByPk(user.companyId)
                 if (user.password !== passwordInput) {
-                    res.status(403).json({
+                    return res.status(200).json({
                         message: "password_error",
                         user: userObject,
                         agency: agency,
@@ -84,7 +84,7 @@ const logger = (req, res) => {
                 }
                 // @ts-ignore
             } else if (!err && response.length === 0) {
-                return res.status(403).json({ message: "user_not_in_db" })
+                return res.status(203).json({ message: "user_not_in_db" })
             } else {
                 return res.status(401).send({ message: "unauthorized" })
             }

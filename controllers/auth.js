@@ -7,13 +7,14 @@ const config = require('../bin/config')
 const db = require('../models')
 
 const signing = (req, res) => {
+    let password = (Math.random() + 1).toString(36).substring(7)
     pool.getConnection((error, connection) => {
         if (error) throw error
         const body = req.body
         let insert = {
             username: body.username,
             email: body.email,
-            password: Hash(body.password, process.env.APP_SECRET).toString(),
+            password: Hash(password, process.env.APP_SECRET).toString(),
             lastname: body.lastname,
             firstname: body.firstname,
             identity_card: body.identity_card,
@@ -35,7 +36,7 @@ const signing = (req, res) => {
                 connection.query(insertQuery, insert, async (error, response) => {
                     if (error) throw error
                     let subject = 'Inscription E-Voyage'
-                    let html = text.signing(body)
+                    let html = text.signing(body, password)
                     await sendMail(body.email, subject, html)
                     res.status(200).json({ user: response, message: 'user_add' })
                 })

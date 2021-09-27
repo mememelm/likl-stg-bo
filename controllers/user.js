@@ -2,7 +2,7 @@ const { pool } = require('../bin/database')
 
 const currentUser = (userId, result) => {
     pool.getConnection((err, connection) => {
-        let query = "Select * from users where id = ?"
+        let query = "Select * from user where id = ?"
         connection.query(query, userId, (err, res) => {
             if (err) {
                 result(err, null)

@@ -1,9 +1,8 @@
 const express = require('express')
 const authenticate = require('../middlewares/authenticate')
 const router = express.Router()
+const user = require('../controllers/user')
 
-router.get('/test', authenticate, function (req, res, next) {
-  res.send('respond with a resource')
-})
+router.post('/exist', authenticate, user.ifUserExist)
 
 module.exports = router

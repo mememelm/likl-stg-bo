@@ -35,8 +35,8 @@ const deleteResult = async (req, res, model) => {
     try {
         if (req.params.id) {
             const element = await model.destroy({ where: { id: req.params.id } })
-            if (element) return res.status(200).send('success')
-            else return res.status(203).send('id_not_found')
+            if (element) return res.status(200).json({ message: 'success' })
+            else return res.status(203).json({ message: 'id_not_found' })
         }
     } catch (error) {
         return res.status(400).send(error)

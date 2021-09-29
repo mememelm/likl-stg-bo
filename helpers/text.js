@@ -2,10 +2,9 @@
 
 let signing = (input, password) => {
     let html =
-        '<h3>Bonjour ' + input.username + '</h3>' +
-        'Bienvenue sur E-Voyage! <br>' +
-        'Vous êtes maintenant inscrit sur la plateforme. <br>' +
-        'Voici les informations pour vous connectez à votre espace personnel : <br>' +
+        "<h3>Bonjour " + input.username + "</h3>" +
+        "Bienvenue sur E-Voyage! <br>" +
+        "Votre inscription sur la plateforme s'est achevée avec succès. <br>" +
         "<p>- Identifiant : " + input.username + "</p>" +
         "<p>- Email : " + input.email + "</p>" +
         "<p>- Mot de passe : " + password + "</p>" +

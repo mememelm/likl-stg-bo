@@ -1,4 +1,18 @@
 const { pool } = require('../bin/database')
+const db = require('../models')
+const { Op } = require('sequelize')
+
+const ifUserExist = async (req, res) => {
+    const user = await db.user.findAll({
+        where: {
+            [Op.or]: [
+                { username: { [Op.eq]: req.body.username } },
+                { email: { [Op.eq]: req.body.email } }
+            ]
+        }
+    })
+    return res.status(200).send(user)
+}
 
 const currentUser = (userId, result) => {
     pool.getConnection((err, connection) => {
@@ -13,4 +27,7 @@ const currentUser = (userId, result) => {
     })
 }
 
-module.exports = { currentUser }
+module.exports = {
+    currentUser,
+    ifUserExist
+}

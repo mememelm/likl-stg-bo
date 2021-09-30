@@ -7,5 +7,6 @@ router.post('/add', authenticate, agency.add)
 router.get('/get', authenticate, agency.get)
 router.put('/update/:id', authenticate, agency.update)
 router.delete('/delete/:id', authenticate, agency.destroy)
+router.get('/get/:id', authenticate, agency.getById)
 
 module.exports = router

@@ -43,9 +43,16 @@ const deleteResult = async (req, res, model) => {
     }
 }
 
+const getByIdResult = async (req, res, model) => {
+    const element = await model.findByPk(req.params.id)
+    if (element) return res.status(200).send(element)
+    else return res.status(203).send('no_data_found')
+}
+
 module.exports = {
     addResult,
     getResult,
     updateResult,
-    deleteResult
+    deleteResult,
+    getByIdResult
 }

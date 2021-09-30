@@ -6,8 +6,8 @@ const ifUserExist = async (req, res) => {
     const user = await db.user.findAll({
         where: {
             [Op.or]: [
-                { username: { [Op.eq]: req.body.username } },
-                { email: { [Op.eq]: req.body.email } }
+                { username: { [Op.eq]: req.query.username } },
+                { email: { [Op.eq]: req.query.email } }
             ]
         }
     })

@@ -23,9 +23,23 @@ const destroy = async (req, res) => {
     result.deleteResult(req, res, db.company)
 }
 
+const getById = async (req, res) => {
+    result.getByIdResult(req, res, db.company)
+}
+
+const getByAgency = async (req, res) => {
+    const model = await db.company.findAll({
+        where: { agencyId: req.params.agencyId },
+        order: [['name', 'ASC']]
+    })
+    result.getResult(model, res)
+}
+
 module.exports = {
     add,
     get,
     update,
-    destroy
+    destroy,
+    getById,
+    getByAgency
 }

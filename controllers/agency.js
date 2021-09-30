@@ -24,9 +24,14 @@ const destroy = async (req, res) => {
     result.deleteResult(req, res, db.agency)
 }
 
+const getById = async (req, res) => {
+    result.getByIdResult(req, res, db.agency)
+}
+
 module.exports = {
     add,
     get,
     update,
-    destroy
+    destroy,
+    getById
 }

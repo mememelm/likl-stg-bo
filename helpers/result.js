@@ -21,7 +21,7 @@ const getResult = (model, res) => {
 
 const updateResult = (model, body, res) => {
     try {
-        if (!model) return res.status(203).send('id_not_found')
+        if (!model) return res.status(203).json({ message: 'id_not_found' })
         else {
             model.update(body)
             return res.status(200).send(model)

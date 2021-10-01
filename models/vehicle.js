@@ -3,8 +3,11 @@
 const vehicle = (sq, type) => {
     return sq.define('vehicle', {
         registration: type.STRING,
-        type: type.STRING,
-        place: type.INTEGER
+        category: { type: type.ENUM, values: ['CLASSIC', 'PREMIUM', 'VIP'] },
+        place: { type: type.ENUM, values: ['10', '16', '19'] },
+        state: type.TINYINT,
+        brand: type.STRING,
+        model: type.STRING
     }, { freezeTableName: true })
 }
 

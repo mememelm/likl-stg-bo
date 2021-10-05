@@ -9,5 +9,4 @@ const place = (sq, type) => {
     }, { freezeTableName: true })
 }
 
-
 module.exports = { place }

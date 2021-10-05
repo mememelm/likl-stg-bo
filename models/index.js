@@ -22,7 +22,6 @@ db.booking = require('./booking').booking(sequelize, SQ)
 db.client = require('./client').client(sequelize, SQ)
 db.transport = require('./transport').transport(sequelize, SQ)
 db.luggage = require('./luggage').luggage(sequelize, SQ)
-db.category = require('./category').category(sequelize, SQ)
 db.package = require('./package').package(sequelize, SQ)
 
 const { userBelongsToAgency, userBelongsToCompany } = require('./user')

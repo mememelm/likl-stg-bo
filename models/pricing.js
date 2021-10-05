@@ -3,8 +3,7 @@
 const pricing = (sq, type) => {
     return sq.define('pricing', {
         description: type.STRING,
-        price: type.INTEGER,
-        unit: type.BOOLEAN
+        price: type.INTEGER
     }, { freezeTableName: true })
 }
 

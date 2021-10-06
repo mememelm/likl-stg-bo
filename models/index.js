@@ -31,8 +31,7 @@ userBelongsToCompany(db.user, db.company)
 const { agencyHasManyCompanies } = require('./agency')
 agencyHasManyCompanies(db.agency, db.company)
 
-const { companyHasManyPricing, companyHasManyItinerary } = require('./company')
-companyHasManyPricing(db.company, db.pricing)
+const { companyHasManyItinerary } = require('./company')
 companyHasManyItinerary(db.company, db.itinerary)
 
 const { vehicleBelongsToCompany, vehicleHasManyPlaces } = require('./vehicle')
@@ -56,5 +55,9 @@ transportHasManyClients(db.transport, db.client)
 const { packageBelongsToTransport, packageBelongsToCompany } = require('./package')
 packageBelongsToTransport(db.package, db.transport)
 packageBelongsToCompany(db.package, db.company)
+
+const { pricingBelongsToCompany, pricingBelongsToAgency } = require('./pricing')
+pricingBelongsToCompany(db.pricing, db.company)
+pricingBelongsToAgency(db.pricing, db.agency)
 
 module.exports = db
